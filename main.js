@@ -51,7 +51,7 @@ async function loadStations(url) {
             },
             onEachFeature: function (feature, layer) {
                 let pointInTime = new Date(feature.properties.date);
-                console.log(pointInTime)
+                //console.log(pointInTime)
                 layer.bindPopup(`
                     <h4>${feature.properties.name} (${feature.geometry.coordinates[2]}m) </h4>
                     <ul>
@@ -93,4 +93,15 @@ function showTemperature(jsondata) {
     }).addTo(overlays.temperature);
 }
 
-console.log(COLORS);
+
+function getColor(value, ramp) {
+    for (let rule of ramp) {
+        if (value >= rule.min && value < rule.max) {
+            return rule.color;
+        }
+    }
+
+}
+ 
+let testColor = getColor(-5, COLORS.temperature);
+console.log("TestColor for temp -5", testColor);
