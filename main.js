@@ -33,10 +33,10 @@ L.control.scale({ imperial: false }).addTo(map);
 
 // Wetterstationen laden
 async function loadStations(url) {
-    try {
+    
         let response = await fetch(url);
         let jsondata = await response.json();
-        console.log(jsondata);
+        
 
         L.geoJSON(jsondata, {
             pointToLayer: function (feature, latlng) {
@@ -49,19 +49,21 @@ async function loadStations(url) {
                 });
             },
             onEachFeature: function (feature, layer) {
-                let name = feature.properties.name || "Unbekannte Station";
-                let elevation = feature.geometry.coordinates[2] || "keine Angabe";
-                let popupContent = `
-                    <strong>${name}</strong><br>
-                    Höhe: ${elevation} m
-                `;
-                layer.bindPopup(popupContent);
+                layer.bindPopup(`
+                    <h4>${feature.properties.name} (${feature.properties.coordinates[2]})m) </h4>
+                    <ul>
+                        <li> Lufttemperatur (c) ${feature.properties.LT}</li>
+                        <li> Relative Luftfeuchte (%) ${feature.properties.RH}</li>
+                        <li> Windgeschwindigkeit (km/h) ${feature.properties.WG}</li>
+                        <li> Schneehöhe (cm) ${feature.properties.HS}</li>
+                    </ul>
+                    <span></span>
+                    
+                    `);
             }
-        }).addTo(overlays.stations); 
-    } catch (err) {
-        console.error("Fehler beim Laden der Wetterstationen:", err);
-    }
+        }).addTo(overlays.stations)
 }
+   
 
 // Aufruf der Funktion mit URL
 loadStations("https://static.avalanche.report/weather_stations/stations.geojson");
