@@ -50,7 +50,7 @@ async function loadStations(url) {
             },
             onEachFeature: function (feature, layer) {
                 let name = feature.properties.name || "Unbekannte Station";
-                let elevation = feature.properties.elevation || "keine Angabe";
+                let elevation = feature.geometry.coordinates[2] || "keine Angabe";
                 let popupContent = `
                     <strong>${name}</strong><br>
                     Höhe: ${elevation} m
