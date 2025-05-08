@@ -1,4 +1,4 @@
-/* Wetterstationen Euregio Beispiel */
+// Wetterstationen Euregio Beispiel
 
 // Innsbruck
 let ibk = {
@@ -13,7 +13,7 @@ let map = L.map("map").setView([ibk.lat, ibk.lng], ibk.zoom);
 // thematische Layer
 let overlays = {
     stations: L.featureGroup().addTo(map),
-}
+};
 
 // Layer control
 L.control.layers({
@@ -29,28 +29,39 @@ L.control.layers({
 }).addTo(map);
 
 // Maßstab
-L.control.scale({
-    imperial: false,
-}).addTo(map);
+L.control.scale({ imperial: false }).addTo(map);
 
-// Wetterstationen
+// Wetterstationen laden
 async function loadStations(url) {
-    let response = await fetch(url);
-    let jsondata = await response.json();
-    console.log(jsondata);
+    try {
+        let response = await fetch(url);
+        let jsondata = await response.json();
+        console.log(jsondata);
 
-    L.geoJSON(jsondata, {
-        pointToLayer: function (feature, latlng) {
-            console.log(feature.properties);
-
-            return L.marker(latlng, {
-                icon: L.icon({
-                    iconUrl: `icons/wifi_.png`,
-                    iconAnchor: [16, 37],
-                    popupAnchor: [0, -37]
-                })
-            });
-        },
-        attribution: "Datenquelle: <a href='https://static.avalanche.report/weather_stations/stations.geojson'>avalanche.report</a>",
-    },).addTo(map);
+        L.geoJSON(jsondata, {
+            pointToLayer: function (feature, latlng) {
+                return L.marker(latlng, {
+                    icon: L.icon({
+                        iconUrl: `icons/wifi.png`,
+                        iconAnchor: [16, 37],
+                        popupAnchor: [0, -37]
+                    })
+                });
+            },
+            onEachFeature: function (feature, layer) {
+                let name = feature.properties.name || "Unbekannte Station";
+                let elevation = feature.properties.elevation || "keine Angabe";
+                let popupContent = `
+                    <strong>${name}</strong><br>
+                    Höhe: ${elevation} m
+                `;
+                layer.bindPopup(popupContent);
+            }
+        }).addTo(overlays.stations); 
+    } catch (err) {
+        console.error("Fehler beim Laden der Wetterstationen:", err);
+    }
 }
+
+// Aufruf der Funktion mit URL
+loadStations("https://static.avalanche.report/weather_stations/stations.geojson");
