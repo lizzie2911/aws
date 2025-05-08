@@ -68,6 +68,7 @@ async function loadStations(url) {
             }
         }).addTo(overlays.stations)
         showTemperature(jsondata);
+        showWind(jsondata);
 }
    
 
@@ -113,7 +114,10 @@ console.log("TestColor for temp -5", testColor);
 function showWind(jsondata) {
     L.geoJson(jsondata, {
         filter: function(feature) {
-            
+            if (feature.properties.LT > 0 && feature.properties.WG < 1000) {
+                return true;
+            }
+
         },
         pointToLayer:function(feature, latlng){
             let color =getColor(feature.properties.WG, COLORS.wind);
