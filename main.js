@@ -113,14 +113,14 @@ console.log("TestColor for temp -5", testColor);
 function showWind(jsondata) {
     L.geoJson(jsondata, {
         filter: function(feature) {
-
+            
         },
         pointToLayer:function(feature, latlng){
-            let color =getColor(feature.properties.LT, COLORS.wind);
+            let color =getColor(feature.properties.WG, COLORS.wind);
             return L.marker (latlng, {
                 icon: L.divIcon({
                     className: "aws-div-icon",
-                    html: `<span style="background-color:${color}">${feature.properties.LT.toFixed(1)}</span>`
+                    html: `<span style="background-color:${color}">${feature.properties.WG.toFixed(1)}</span>`
                 }),
             })
         },
@@ -128,3 +128,14 @@ function showWind(jsondata) {
 
     }).addTo(overlays.wind);
 }
+function getWindColor(value, ramp) {
+    for (let rule of ramp) {
+        if (value >= rule.min && value < rule.max) {
+            return rule.color;
+        }
+    }
+
+}
+ 
+let testedColor = getWindColor(5, COLORS.wind);
+console.log("TestColor for temp 5", testedColor);
