@@ -13,7 +13,7 @@ let map = L.map("map").setView([ibk.lat, ibk.lng], ibk.zoom);
 // thematische Layer
 let overlays = {
     stations: L.featureGroup().addTo(map),
-    temperature: L.featureGroup(),
+    temperature: L.featureGroup().addTo(map),
 };
 
 // Layer control
@@ -65,8 +65,24 @@ async function loadStations(url) {
                     `);
             }
         }).addTo(overlays.stations)
+        showTemperature(jsondata);
 }
    
 
 // Aufruf der Funktion mit URL
 loadStations("https://static.avalanche.report/weather_stations/stations.geojson");
+
+function showTemperature(jsondata) {
+    L.geoJson(jsondata, {
+        pointToLayer:function(feature, latlng){
+            return L.marker (latlng, {
+                icon: L.divIcon({
+                    className: "aws-div-icon",
+                    html: `<span>${feature.properties.LT}</span>`
+                }),
+            })
+        },
+
+
+    }).addTo(overlays.temperature);
+}
