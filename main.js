@@ -74,6 +74,12 @@ loadStations("https://static.avalanche.report/weather_stations/stations.geojson"
 
 function showTemperature(jsondata) {
     L.geoJson(jsondata, {
+        filter: function(feature) {
+            if (feature.properties.LT > -50 && feature.properties.LT < 50) {
+                return true;
+            }
+
+        },
         pointToLayer:function(feature, latlng){
             return L.marker (latlng, {
                 icon: L.divIcon({
