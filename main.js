@@ -33,7 +33,6 @@ L.control.scale({ imperial: false }).addTo(map);
 
 // Wetterstationen laden
 async function loadStations(url) {
-    
         let response = await fetch(url);
         let jsondata = await response.json();
         
@@ -50,9 +49,9 @@ async function loadStations(url) {
             },
             onEachFeature: function (feature, layer) {
                 layer.bindPopup(`
-                    <h4>${feature.properties.name} (${feature.properties.coordinates[2]})m) </h4>
+                    <h4>${feature.properties.name} (${feature.geometry.coordinates[2]}m) </h4>
                     <ul>
-                        <li> Lufttemperatur (c) ${feature.properties.LT}</li>
+                        <li> Lufttemperatur (c) ${feature.properties.LT !== undefined ? feature.properties.LT : "-"}</li>
                         <li> Relative Luftfeuchte (%) ${feature.properties.RH}</li>
                         <li> Windgeschwindigkeit (km/h) ${feature.properties.WG}</li>
                         <li> Schneehöhe (cm) ${feature.properties.HS}</li>
