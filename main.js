@@ -63,6 +63,7 @@ async function loadStations(url) {
                         <li> Relative Luftfeuchte (%) ${feature.properties.RH}</li>
                         <li> Windgeschwindigkeit (km/h) ${feature.properties.WG}</li>
                         <li> Schneehöhe (cm) ${feature.properties.HS}</li>
+                        <li> Windrichtung ${feature.properties.WD}</li>
                     </ul>
                     <span>${pointInTime.toLocaleString()}</span>
                     
@@ -139,17 +140,18 @@ function showSnow(jsondata) {
 function showWind(jsondata) {
     L.geoJson(jsondata, {
         filter: function(feature) {
-            if (feature.properties.LT > 0 && feature.properties.WG < 1000) {
+            if (feature.properties.WG > 0 && feature.properties.WG < 1000) {
                 return true;
             }
 
         },
         pointToLayer:function(feature, latlng){
-            let color =getColor(feature.properties.WG, COLORS.wind);
+            let color =getColor(feature.properties.WD, COLORS.wind);
             return L.marker (latlng, {
                 icon: L.divIcon({
                     className: "aws-div-icon-wind",
-                    html: `<span style="background-color:${color}">${feature.properties.WG.toFixed(1)}</span>`
+                    html: `<span style="background-color:${color}">${feature.properties.WD.toFixed(1)}</span>`
+
                 }),
             })
         },
