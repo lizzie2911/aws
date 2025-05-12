@@ -133,7 +133,7 @@ function showSnow(jsondata) {
         },
 
 
-    }).addTo(overlays.snow);
+    }).addTo(overlays.snow);}
 
 // Wind 
 function showWind(jsondata) {
@@ -155,16 +155,4 @@ function showWind(jsondata) {
         },
 
 
-    }).addTo(overlays.wind);
-}
-function getWindColor(value, ramp) {
-    for (let rule of ramp) {
-        if (value >= rule.min && value < rule.max) {
-            return rule.color;
-        }
-    }
-
-}
- 
-let testedColor = getWindColor(5, COLORS.wind);
-console.log("TestColor for temp 5", testedColor);
+    }).addTo(overlays.wind);}
