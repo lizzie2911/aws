@@ -15,6 +15,7 @@ let overlays = {
     stations: L.featureGroup().addTo(map),
     temperature: L.featureGroup().addTo(map),
     wind: L.featureGroup().addTo(map),
+    snow: L.featureGroup().addTo(map),
 };
 
 // Layer control
@@ -30,6 +31,7 @@ L.control.layers({
     "Wetterstationen": overlays.stations,
     "Temperatur": overlays.temperature,
     "Windgeschwindigkeit": overlays.wind,
+    "Schneehöhen": overlays.snow,
 }).addTo(map);
 
 // Maßstab
@@ -69,6 +71,7 @@ async function loadStations(url) {
         }).addTo(overlays.stations)
         showTemperature(jsondata);
         showWind(jsondata);
+        showSnow(jsondata);
 }
    
 
@@ -109,6 +112,28 @@ function getColor(value, ramp) {
  
 let testColor = getColor(-5, COLORS.temperature);
 console.log("TestColor for temp -5", testColor);
+
+// Snow
+function showSnow(jsondata) {
+    L.geoJson(jsondata, {
+        filter: function(feature) {
+            if (feature.properties.HS > 0 && feature.properties.HS < 1000) {
+                return true;
+            }
+
+        },
+        pointToLayer:function(feature, latlng){
+            let color =getColor(feature.properties.HS, COLORS.snow);
+            return L.marker (latlng, {
+                icon: L.divIcon({
+                    className: "aws-div-icon",
+                    html: `<span style="background-color:${color}">${feature.properties.HS.toFixed(1)}</span>`
+                }),
+            })
+        },
+
+
+    }).addTo(overlays.snow);
 
 // Wind 
 function showWind(jsondata) {
