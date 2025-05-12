@@ -146,11 +146,11 @@ function showWind(jsondata) {
 
         },
         pointToLayer:function(feature, latlng){
-            let color =getColor(feature.properties.WD, COLORS.wind);
+            let color =getColor(feature.properties.WG, COLORS.wind);
             return L.marker (latlng, {
                 icon: L.divIcon({
                     className: "aws-div-icon-wind",
-                    html: `<span style="background-color:${color}">${feature.properties.WD.toFixed(1)}</span>`
+                    html: `<span style="background-color:${color}">${feature.properties.WG.toFixed(1)}</span>`
 
                 }),
             })
