@@ -126,7 +126,7 @@ function showSnow(jsondata) {
             let color =getColor(feature.properties.HS, COLORS.snow);
             return L.marker (latlng, {
                 icon: L.divIcon({
-                    className: "aws-div-icon",
+                    className: "aws-div-icon-snow",
                     html: `<span style="background-color:${color}">${feature.properties.HS.toFixed(1)}</span>`
                 }),
             })
