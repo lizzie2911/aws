@@ -10,11 +10,6 @@ let ibk = {
 // Karte initialisieren
 let map = L.map("map").setView([ibk.lat, ibk.lng], ibk.zoom);
 
-var Voyager = L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png')
-
-var baseMaps = {
-  "Voyager": Voyager              
-};
 
 
 // thematische Layer
@@ -41,6 +36,17 @@ L.control.layers({
     "Schneehöhen": overlays.snow,
     
 }).addTo(map);
+    // Change default options
+    L.control.rainviewer({ 
+        position: 'bottomleft',
+        nextButtonText: '>',
+        playStopButtonText: 'Play/Stop',
+        prevButtonText: '<',
+        positionSliderLabelText: "Hour:",
+        opacitySliderLabelText: "Opacity:",
+        animationInterval: 500,
+        opacity: 0.5
+    }).addTo(map);
 
 // Maßstab
 L.control.scale({ imperial: false }).addTo(map);
@@ -169,18 +175,3 @@ function showWind(jsondata) {
 
 
     }).addTo(overlays.wind);}
-
-
-// Change default options
-L.control.rainviewer({ 
-    position: 'bottomleft',
-    nextButtonText: '>',
-    playStopButtonText: 'Play/Stop',
-    prevButtonText: '<',
-    positionSliderLabelText: "Hour:",
-    opacitySliderLabelText: "Opacity:",
-    animationInterval: 500,
-    opacity: 0.5
-}).addTo(map);
-
-baseMaps['Voyager'].addTo(map);
