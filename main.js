@@ -167,7 +167,7 @@ function showWind(jsondata) {
             return L.marker (latlng, {
                 icon: L.divIcon({
                     className: "aws-div-icon-wind",
-                    html: `<span style="background-color:${color}">${feature.properties.WR.toFixed(1)}</span>`
+                    html: `<span style="background-color:${color}">${feature.properties.WR.toFixed(0)}</span>`
 
                 }),
             })
