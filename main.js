@@ -10,6 +10,13 @@ let ibk = {
 // Karte initialisieren
 let map = L.map("map").setView([ibk.lat, ibk.lng], ibk.zoom);
 
+var Voyager = L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png')
+
+var baseMaps = {
+  "Voyager": Voyager              
+};
+
+
 // thematische Layer
 let overlays = {
     stations: L.featureGroup().addTo(map),
@@ -175,3 +182,5 @@ L.control.rainviewer({
     animationInterval: 500,
     opacity: 0.5
 }).addTo(map);
+
+baseMaps['Voyager'].addTo(map);
