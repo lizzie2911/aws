@@ -169,7 +169,7 @@ function showWind(jsondata) {
                 icon: L.divIcon({
                     className: "aws-div-icon-wind",
                     html: `<span><i style="transform:rotate(${feature.properties.WR}deg);
-                    background-color:${color}"; class="fa-solid fa-circle-arrow-down"></i></span>`,
+                    color:${color}"; class="fa-solid fa-circle-arrow-down"></i></span>`,
 
                 }),
             })
