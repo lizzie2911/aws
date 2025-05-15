@@ -30,8 +30,9 @@ L.control.layers({
 }, {
     "Wetterstationen": overlays.stations,
     "Temperatur": overlays.temperature,
-    "Windgeschwindigkeit": overlays.wind,
+    "Windgeschwindigkeit und -richtung": overlays.wind,
     "Schneehöhen": overlays.snow,
+    
 }).addTo(map);
 
 // Maßstab
@@ -41,6 +42,7 @@ L.control.scale({ imperial: false }).addTo(map);
 async function loadStations(url) {
         let response = await fetch(url);
         let jsondata = await response.json();
+        console.log(jsondata)
         
 
         L.geoJSON(jsondata, {
@@ -55,7 +57,7 @@ async function loadStations(url) {
             },
             onEachFeature: function (feature, layer) {
                 let pointInTime = new Date(feature.properties.date);
-                //console.log(pointInTime)
+                console.log(pointInTime)
                 layer.bindPopup(`
                     <h4>${feature.properties.name} (${feature.geometry.coordinates[2]}m) </h4>
                     <ul>
@@ -63,7 +65,7 @@ async function loadStations(url) {
                         <li> Relative Luftfeuchte (%) ${feature.properties.RH}</li>
                         <li> Windgeschwindigkeit (km/h) ${feature.properties.WG}</li>
                         <li> Schneehöhe (cm) ${feature.properties.HS}</li>
-                        <li> Windrichtung ${feature.properties.WD}</li>
+                        <li> Windrichtung (°) ${feature.properties.WR}</li>
                     </ul>
                     <span>${pointInTime.toLocaleString()}</span>
                     
@@ -73,11 +75,13 @@ async function loadStations(url) {
         showTemperature(jsondata);
         showWind(jsondata);
         showSnow(jsondata);
+        showDirection(jsondata);
 }
    
 
 // Aufruf der Funktion mit URL
 loadStations("https://static.avalanche.report/weather_stations/stations.geojson");
+log.console(jsondata.feature)
 
 // Temperaturen Feauture:
 function showTemperature(jsondata) {
@@ -140,7 +144,7 @@ function showSnow(jsondata) {
 function showWind(jsondata) {
     L.geoJson(jsondata, {
         filter: function(feature) {
-            if (feature.properties.WG > 0 && feature.properties.WG < 1000) {
+            if (feature.properties.WR > 0 && feature.properties.WR < 1000) {
                 return true;
             }
 
@@ -150,7 +154,7 @@ function showWind(jsondata) {
             return L.marker (latlng, {
                 icon: L.divIcon({
                     className: "aws-div-icon-wind",
-                    html: `<span style="background-color:${color}">${feature.properties.WG.toFixed(1)}</span>`
+                    html: `<span style="background-color:${color}">${feature.properties.WR.toFixed(1)}</span>`
 
                 }),
             })
